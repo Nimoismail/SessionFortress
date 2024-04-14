@@ -14,18 +14,22 @@ def login():
     if request.method == 'POST':
         session.permanent = True
         user = request.form['nm']
+        flash("Login successful!")
         session['user'] = user
-        return redirect(url_for('user', usr=user))
+        return redirect(url_for('user', user=user))
     else:
+        if "user" in session:
+            flash("Already logged in!")
+            return redirect(url_for("user"))
         return render_template("login.html")
 
 
 
-@app.route('/<usr>')
-def user(usr):
+@app.route('/user')
+def user():
    if 'user' in session :
     user = session['user'] 
-    return f'<h1>{usr}<h1>'
+    return render_template("view.html")
    else:
       return redirect(url_for('login'))
    
